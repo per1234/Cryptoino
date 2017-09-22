@@ -33,11 +33,6 @@ union Buffer{
 	uint32_t w[SHA256_BUFFERSIZE / 4];
 };
 
-union State{
-	uint8_t b[SHA256_HASHSIZE];
-	uint32_t w[SHA256_HASHSIZE / 4];
-};
-
 class SHA256 : public Print{
   public:
     SHA256();
@@ -52,7 +47,7 @@ class SHA256 : public Print{
 	
 	Buffer data;
 	uint8_t buffer_index;
-	State state;
+	uint32_t state[SHA256_HASHSIZE / 4];
 
 	uint32_t bytes;
 };

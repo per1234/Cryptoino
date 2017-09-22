@@ -19,7 +19,7 @@ void SHA256::init(){
 	bytes = 0;
 	
 	buffer_index = 0;
-	memcpy_P(state.w, SHA256_INIT_STATE, sizeof(SHA256_INIT_STATE));
+	memcpy_P(state, SHA256_INIT_STATE, sizeof(SHA256_INIT_STATE));
 }
 
 size_t SHA256::write(uint8_t d){
@@ -42,14 +42,14 @@ void SHA256::hash_block(){
 	uint8_t i;
 	uint32_t a, b, c, d, e, f, g, h, t1, t2;
 	
-	a = state.w[0];
-	b = state.w[1];
-	c = state.w[2];
-	d = state.w[3];
-	e = state.w[4];
-	f = state.w[5];
-	g = state.w[6];
-	h = state.w[7];
+	a = state[0];
+	b = state[1];
+	c = state[2];
+	d = state[3];
+	e = state[4];
+	f = state[5];
+	g = state[6];
+	h = state[7];
 
 	for (i=0; i<64; i++) {
 		if (i>=16) {
@@ -73,14 +73,14 @@ void SHA256::hash_block(){
 		a = t1 + t2;
 	}
 	
-	 state.w[0] += a;
-	 state.w[1] += b;
-	 state.w[2] += c;
-	 state.w[3] += d;
-	 state.w[4] += e;
-	 state.w[5] += f;
-	 state.w[6] += g;
-	 state.w[7] += h;
+	 state[0] += a;
+	 state[1] += b;
+	 state[2] += c;
+	 state[3] += d;
+	 state[4] += e;
+	 state[5] += f;
+	 state[6] += g;
+	 state[7] += h;
 }
 
 void SHA256::pad(){
@@ -102,13 +102,13 @@ void SHA256::result(uint8_t hash[]){
 
 	for (int i=0; i<8; i++) {
 		uint32_t a,b;
-		a=state.w[i];
+		a=state[i];
 		b=a<<24;
 		b|=(a<<8) & 0x00ff0000;
 		b|=(a>>8) & 0x0000ff00;
 		b|=a>>24;
-		state.w[i]=b;
+		state[i]=b;
 	}
 	
-	memcpy(hash, state.b, sizeof(state.b));
+	memcpy(hash, state, sizeof(state));
 }
